@@ -4,6 +4,7 @@ import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
+import java.util.function.Predicate;
 
 import org.springframework.stereotype.Component;
 
@@ -45,5 +46,11 @@ public class UserDaoService {
 			userList.add(new UserDetails(newUser.getUserId(), newUser.getName(), newUser.getDateOfBirth()));
 			return newUser;
 		}
+	}
+
+	public void deleteUserById(Integer userId) {
+
+		Predicate<? super UserDetails> predicate = user -> user.getUserId().equals(userId);
+		userList.removeIf(predicate);
 	}
 }
