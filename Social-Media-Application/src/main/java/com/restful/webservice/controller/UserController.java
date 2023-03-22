@@ -20,6 +20,7 @@ import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import com.restful.webservice.bean.UserDetails;
 import com.restful.webservice.dao.UserDaoService;
+import com.restful.webservice.exception.UserNotFoundException;
 
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;
@@ -47,22 +48,21 @@ public class UserController {
 		return new ResponseEntity<>(service.findAll(), HttpStatus.OK);
 	}
 
-//	@GetMapping(path = "/{id}")
-//	@ApiOperation(produces = MediaType.APPLICATION_XML_VALUE, value = "Get user by id")
-//	@ApiResponses({ @ApiResponse(code = 200, message = "Successful request."),
-//			@ApiResponse(code = 400, message = "Malformed parameters or no results found."),
-//			@ApiResponse(code = 500, message = "Internal server error, more details in logs.") })
-//	public EntityModel<UserDetails> getUser(
-//			@ApiParam(value = "Valid userId. <br/>Example:101") @PathVariable(name = "id", required = true) Integer userId) {
-//		UserDetails user = service.getUser(userId);
-//
-//		if (user == null) {
-//			throw new UserNotFoundException("id:" + userId);
-//		} else {
-//			EntityModel<UserDetails> entityModel = EntityModel.of(user);
-//			return entityModel;
-//		}
-//	}
+	@GetMapping(path = "/{id}")
+	@ApiOperation(produces = MediaType.APPLICATION_XML_VALUE, value = "Get user by id")
+	@ApiResponses({ @ApiResponse(code = 200, message = "Successful request."),
+			@ApiResponse(code = 400, message = "Malformed parameters or no results found."),
+			@ApiResponse(code = 500, message = "Internal server error, more details in logs.") })
+	public ResponseEntity<UserDetails> getUser(
+			@ApiParam(value = "Valid userId. <br/>Example:101") @PathVariable(name = "id", required = true) Integer userId) {
+		UserDetails user = service.getUser(userId);
+
+		if (user == null) {
+			throw new UserNotFoundException("id:" + userId);
+		} else {
+			return new ResponseEntity<>(user, HttpStatus.OK);
+		}
+	}
 
 	@PostMapping(path = "/users")
 	@ApiOperation(produces = MediaType.APPLICATION_JSON_VALUE, value = "create user")

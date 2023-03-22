@@ -5,7 +5,11 @@ import java.time.LocalDate;
 import javax.validation.constraints.Past;
 import javax.validation.constraints.Size;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
+
 public class UserDetails {
+	
+	@JsonProperty("userID")
 	private Integer userId;
 
 	@Size(min = 2, message = "Name should have atleast 2 characters")
