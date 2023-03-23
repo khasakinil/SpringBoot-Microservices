@@ -2,6 +2,7 @@ package com.restful.webservice.controller;
 
 import java.net.URI;
 import java.util.List;
+import java.util.Optional;
 
 import javax.validation.Valid;
 
@@ -19,7 +20,7 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import com.restful.webservice.bean.UserDetails;
-import com.restful.webservice.dao.UserDaoService;
+import com.restful.webservice.bean.UserPosts;
 import com.restful.webservice.dao.UserJpaService;
 import com.restful.webservice.exception.UserNotFoundException;
 
@@ -90,4 +91,45 @@ public class UserJpaController {
 
 	}
 
+	@GetMapping(path = "/user/{id}")
+	@ApiOperation(produces = MediaType.APPLICATION_JSON_VALUE, value = "Get user by id")
+	@ApiResponses({ @ApiResponse(code = 200, message = "Successful request."),
+			@ApiResponse(code = 400, message = "Malformed parameters or no results found."),
+			@ApiResponse(code = 500, message = "Internal server error, more details in logs.") })
+	public ResponseEntity<UserDetails> getUniqueUser(
+			@ApiParam(value = "Valid userId. <br/>Example:101") @PathVariable(name = "id", required = true) Integer userId) {
+		Optional<UserDetails> user = service.getUniqueUser(userId);
+
+		if (user.isEmpty()) {
+			throw new UserNotFoundException("User not found, UserId:" + userId);
+		} else {
+			return new ResponseEntity<>(user.get(), HttpStatus.OK);
+		}
+	}
+
+	@GetMapping(path = "/jpa/users/{id}/posts")
+	@ApiOperation(produces = MediaType.APPLICATION_JSON_VALUE, value = "get post by user id")
+	@ApiResponses({ @ApiResponse(code = 200, message = "Successful request."),
+			@ApiResponse(code = 400, message = "Malformed parameters or no results found."),
+			@ApiResponse(code = 500, message = "Internal server error, more details in logs.") })
+	public List<UserPosts> listUserPosts(
+			@ApiParam(value = "Valid userId. <br/>Example:101") @PathVariable(name = "id", required = true) Integer userId) {
+//		return service.getUserPosts(userId);
+		return service.getUserPostsFromUserDetailsTable(userId);
+	}
+
+	@PostMapping(path = "/jpa/users/{id}/posts")
+	@ApiOperation(produces = MediaType.APPLICATION_JSON_VALUE, value = "create post for user")
+	@ApiResponses({ @ApiResponse(code = 200, message = "Successful request."),
+			@ApiResponse(code = 400, message = "Malformed parameters or no results found."),
+			@ApiResponse(code = 500, message = "Internal server error, more details in logs.") })
+	public ResponseEntity<Object> createPostForUser(
+			@ApiParam(value = "Valid userId. <br/>Example:101") @PathVariable(name = "id", required = true) Integer userId,
+			@Valid @RequestBody UserPosts post) {
+
+		UserPosts userPost = service.createPostForUser(userId, post);
+		URI location = ServletUriComponentsBuilder.fromCurrentRequest().path("/{id}").buildAndExpand(userPost.getId())
+				.toUri();
+		return ResponseEntity.created(location).build();
+	}
 }

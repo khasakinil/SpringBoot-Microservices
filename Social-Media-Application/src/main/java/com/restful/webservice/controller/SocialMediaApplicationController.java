@@ -42,7 +42,7 @@ public class SocialMediaApplicationController {
 			@ApiParam(value = "Valid userId. <br/>Example:101") @RequestParam(required = false) final Integer userId,
 			@ApiParam(value = "Valid user name. <br/>Example:Ganesh") @RequestParam(required = true) final String userName,
 			@ApiParam(value = "Valid user DOB. <br/>Example:2nd June 1992") @RequestParam(required = false) final LocalDate dob) {
-		return new ResponseEntity<>(new UserDetails(userId, userName, dob), HttpStatus.OK);
+		return new ResponseEntity<>(new UserDetails(userId, userName, dob, null), HttpStatus.OK);
 	}
 
 	@PostMapping(path = "/user/info/requestbody")
@@ -53,7 +53,7 @@ public class SocialMediaApplicationController {
 	public ResponseEntity<UserDetails> getUserInfoUsingRequestBody(
 			@ApiParam(value = "User Details") @RequestBody(required = true) final UserDetails userDetails) {
 		return new ResponseEntity<>(
-				new UserDetails(userDetails.getUserId(), userDetails.getName(), userDetails.getDateOfBirth()),
+				new UserDetails(userDetails.getUserId(), userDetails.getName(), userDetails.getDateOfBirth(), null),
 				HttpStatus.OK);
 	}
 
@@ -64,7 +64,7 @@ public class SocialMediaApplicationController {
 			@ApiResponse(code = 500, message = "Internal server error, more details in logs.") })
 	public String helloWorldInternationalized() {
 		ResourceBundleMessageSource messageSource = new ResourceBundleMessageSource();
-        messageSource.setBasename("messages");
+		messageSource.setBasename("messages");
 		Locale locale = LocaleContextHolder.getLocale();
 		return messageSource.getMessage("good.morning.message", null, "Default Message", locale);
 	}

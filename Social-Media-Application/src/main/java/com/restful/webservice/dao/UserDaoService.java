@@ -19,12 +19,12 @@ public class UserDaoService {
 	private static Integer userCount = 0;
 
 	static {
-		userList.add(new UserDetails(++userCount, "Rajshekhar", LocalDate.now().minusYears(30)));
-		userList.add(new UserDetails(++userCount, "Mahadeo", LocalDate.now().minusYears(35)));
-		userList.add(new UserDetails(++userCount, "Satish", LocalDate.now().minusYears(20)));
-		userList.add(new UserDetails(++userCount, "Manoj", LocalDate.now().minusYears(16)));
-		userList.add(new UserDetails(++userCount, "Suraj", LocalDate.now().minusYears(73)));
-		userList.add(new UserDetails(++userCount, "Tanaji", LocalDate.now().minusYears(11)));
+		userList.add(new UserDetails(++userCount, "Rajshekhar", LocalDate.now().minusYears(30), null));
+		userList.add(new UserDetails(++userCount, "Mahadeo", LocalDate.now().minusYears(35), null));
+		userList.add(new UserDetails(++userCount, "Satish", LocalDate.now().minusYears(20), null));
+		userList.add(new UserDetails(++userCount, "Manoj", LocalDate.now().minusYears(16), null));
+		userList.add(new UserDetails(++userCount, "Suraj", LocalDate.now().minusYears(73), null));
+		userList.add(new UserDetails(++userCount, "Tanaji", LocalDate.now().minusYears(11), null));
 	}
 
 	public List<UserDetails> findAll() {
@@ -43,7 +43,7 @@ public class UserDaoService {
 			return newUser;
 		} else {
 			newUser.setUserId(++userCount);
-			userList.add(new UserDetails(newUser.getUserId(), newUser.getName(), newUser.getDateOfBirth()));
+			userList.add(new UserDetails(newUser.getUserId(), newUser.getName(), newUser.getDateOfBirth(), null));
 			return newUser;
 		}
 	}
