@@ -2,14 +2,20 @@ package com.restful.webservice.bean;
 
 import java.time.LocalDate;
 
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.Id;
 import javax.validation.constraints.Past;
 import javax.validation.constraints.Size;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 
+@Entity
 public class UserDetails {
-	
+
 	@JsonProperty("userID")
+	@Id
+	@GeneratedValue
 	private Integer userId;
 
 	@Size(min = 2, message = "Name should have atleast 2 characters")
