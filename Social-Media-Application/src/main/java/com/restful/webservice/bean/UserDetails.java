@@ -28,7 +28,7 @@ public class UserDetails {
 	private LocalDate dateOfBirth;
 
 	@OneToMany(mappedBy = "user")
-//	@JsonIgnore
+	@JsonIgnore
 	private List<UserPosts> posts;
 
 	public UserDetails() {
